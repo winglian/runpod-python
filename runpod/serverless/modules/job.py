@@ -93,15 +93,8 @@ def run_job(handler, job):
             return
         elif isinstance(job_output, bool):
             run_result = {"output": job_output}
-        elif "error" in job_output:
-            run_result = {"error": str(job_output["error"])}
-        elif "refresh_worker" in job_output:
-            job_output.pop("refresh_worker")
-            run_result = {
-                "stopPod": True,
-                "output": job_output
-            }
         else:
+            log.info(f"recieved: {job_output}")
             run_result = {"output": job_output}
 
         check_return_size(run_result)  # Checks the size of the return body.
