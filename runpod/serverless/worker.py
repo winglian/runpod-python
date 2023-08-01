@@ -62,7 +62,8 @@ async def run_worker(config: Dict[str, Any]) -> None:
 
         while job_scaler.is_alive():
             async def process_job(job):
-                if inspect.isgeneratorfunction(config["handler"]):
+                streaming = job.get("input", {}).get("streaming", False)
+                if streaming or inspect.isgeneratorfunction(config["handler"]):
                     job_result = run_job_generator(config["handler"], job)
 
                     log.debug("Handler is a generator, streaming results.")
