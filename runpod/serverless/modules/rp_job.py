@@ -154,8 +154,7 @@ async def run_job_generator(
     Yields output partials from the generator.
     '''
     try:
-        job_output = handler(job)
-        for output_partial in job_output:
+        async for output_partial in await handler(job):  # Use async for here
             yield {"output": output_partial}
     except Exception as err:    # pylint: disable=broad-except
         log.error(f'Error while running job {job["id"]}: {err}')
